@@ -1,4 +1,4 @@
-FROM php:8.4-fpm
+FROM php:8.3-cli
 
 ARG user=carlos
 ARG uid=1000
