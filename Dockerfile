@@ -20,6 +20,9 @@ RUN useradd -G www-data,root -u $uid -d /home/$user $user
 RUN mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
 
+# Install swoole
+RUN pecl install openswoole-22.1.2
+
 WORKDIR /var/www
 
 USER $user
