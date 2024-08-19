@@ -1,28 +1,17 @@
-FROM php:8.3-cli
+FROM php:8.3-cli-alpine
 
-ARG user=carlos
-ARG uid=1000
+RUN apk add --no-cache \
+    libzip-dev \
+    autoconf \
+    build-base \
+    && docker-php-ext-install zip pdo_mysql
 
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip \
-    unzip
+RUN pecl install swoole-5.1.2 && docker-php-ext-enable swoole
 
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd sockets
-
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer 
-
-RUN useradd -G www-data,root -u $uid -d /home/$user $user
-RUN mkdir -p /home/$user/.composer && \
-    chown -R $user:$user /home/$user
-
-# Install swoole
-RUN pecl install openswoole-22.1.2
+COPY . /var/www
 
 WORKDIR /var/www
 
-USER $user
+EXPOSE 8000
+
+CMD ["php", "public/server.php"]

@@ -1,0 +1,16 @@
+services:
+  php:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/var/www
+    ports:
+      - "8000:8000"
+    # command: php public/server.php
+    networks:
+      - swoole_network
+
+networks:
+  swoole_network:
+    driver: bridge
