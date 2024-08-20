@@ -7,7 +7,8 @@ services:
       - ./:/var/www
     ports:
       - "8000:8000"
-    # command: php public/server.php
+      - "9502:9502"
+    command: php public/websocket.php
     networks:
       - swoole_network
 
