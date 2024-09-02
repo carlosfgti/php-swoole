@@ -7,8 +7,14 @@ services:
       - ./:/var/www
     ports:
       - "8000:8000"
-      - "9502:9502"
-    command: php public/websocket.php
+    command: >
+      /bin/sh -c "
+      php public/server.php &
+      while true; do
+        inotifywait -e modify,create,delete -r /var/www &&
+        pkill -f 'php public/server.php';
+        php public/server.php &
+      done"
     networks:
       - swoole_network
 
